@@ -22,6 +22,17 @@ def load_dictionary(filename)
   words
 end
 
-words = load_dictionary("words.txt")
+class Game
 
-p pick_word(words)
+  attr_accessor :name
+
+  def initialize(name)
+    @name = name
+
+    @words = load_dictionary("words.txt")
+
+
+  end
+
+end
+
