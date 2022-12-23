@@ -40,10 +40,13 @@ class Game
     @words = load_dictionary(filename)
 
     @word_to_guess = pick_word(@words)
+    @length = @word_to_guess.length
 
     @number_of_guesses = 6
 
     @display = ""
+
+    @start_game = false
 
   end
 
@@ -61,45 +64,56 @@ class Game
     end
   end
 
-
-
-
-  def launch_game
-    # SETUP DISPLAY
-    add_underscores(@word_to_guess.length)
-
-  puts @word_to_guess
-  puts @display
-
-  # display number of spaces
-
-  # ask user prompt to guess letter
-
-  guess = get_user_input
-  puts guess
-
-    # if guess is right, change blank space to letter
-
+  def get_user_guesses
+    guess = get_user_input
     if @word_to_guess.include?(guess)
-
       index_array = @word_to_guess.indexes(guess)
-      puts "GUESSED CORRECTLY"
       index_array.each { |index| @display[index] = guess}
-
-
+      puts "CORRECT GUESS"
     else
-      puts "WRONG GUESS"
       @number_of_guesses -= 1
+      puts "WRONG GUESS"
     end
 
     puts @display
-      # need to account for spaces with the same letter
-    # if guess is wrong, subtract from total number of guess
-  # repeat until user is out of guesses or guess the word correctly
+
+  end
+
+  def welcome_message
+    puts "Welcome to Hangman!\n"
+    puts "You will have 6 tries to guess the word correctly.\n"
+    puts "Ready? Y/N"
+
+    ready = gets.gsub(/[^a-z]/i, '').downcase.chomp.strip
+
+    if ready == "yes"
+      @start_game = true
+    end
 
   end
 
 
+  def launch_game
+
+    # SETUP DISPLAY
+    add_underscores(@length)
+
+    # Write out intro to game
+
+    welcome_message
+
+    if @start_game
+      puts @display
+      while @number_of_guesses > 0
+        get_user_guesses
+      end
+      if @number_of_guesses == 0
+        puts "GAME OVER"
+      end
+      end
+    end
+
+  # ask user prompt to guess letter
 end
 
 test_game = Game.new("test")
